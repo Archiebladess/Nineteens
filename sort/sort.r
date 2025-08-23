@@ -16,7 +16,7 @@ train_deepseek <- read_csv("C:/Users/FLORENTINA REGITA/Downloads/data-analysis-c
 train_grok <- read_csv("C:/Users/FLORENTINA REGITA/Downloads/data-analysis-competition-2025/Train/grok.csv")
 train_perplexity <- read_csv("C:/Users/FLORENTINA REGITA/Downloads/data-analysis-competition-2025/Train/perplexity.csv")
 
-df_sample <- list(sample)
+#gabungin semua data test dan train ke dalam list
 df_test <- list(test_gpt, test_claude, test_gemini, test_deepseek, test_grok, test_perplexity)
 df_train <- list(train_gpt, train_claude, train_gemini, train_deepseek, train_grok, train_perplexity)
 
@@ -26,6 +26,16 @@ run <- function(head){
     }
 }
 
-run_sample <- run(df_sample)
 run_test <- run(df_test)
 run_train <- run(df_train)
+
+#sorting ascending
+sort_sample <- sample[order(new_sample$Sentiment), ]
+sort_test <- lapply(new_test, function(df) df[order(df$CommentId), ])
+sort_train <- lapply(new_train, function(df) df[order(df$Sentiment), ])
+
+#standarisasi format data
+clean_test <- lapply(new_test, function(df) {
+  df$Comment <- trimws(df$Comment)
+  df
+})
