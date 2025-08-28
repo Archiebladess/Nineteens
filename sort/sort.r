@@ -24,49 +24,19 @@ train_perplexity <- read_csv("C:/Users/FLORENTINA REGITA/Downloads/data-analysis
 df_test <- list(test_gpt, test_claude, test_gemini, test_deepseek, test_grok, test_perplexity)
 df_train <- list(train_gpt, train_claude, train_gemini, train_deepseek, train_grok, train_perplexity)
 
-#cek tipe data
-str(sample)
-lapply(run_test, str)
-lapply(run_train, str)
-
-#cek missing value dan hapus missing value
-cek_sample <- colSums(is.na(sample))
-cek_test <- lapply(run_test, function(df) print(colSums(is.na(df))))
-cek_train <- lapply(run_train, function(df) print(colSums(is.na(df))))
-
-new_sample <- na.omit(sample)
-new_test <- lapply(df_test, na.omit)
-new_train <- lapply(df_train, na.omit)
-
-#cek duplikat
-duplikat_sample <- duplicated(sample)
-duplikat_test <- lapply(run_test, duplicated)
-duplikat_train <- lapply(run_train, duplicated)
-
-double_sample <- sum(duplikat_sample)
-double_test <- lapply(duplikat_test, sum)
-double_train <- lapply(duplikat_train, sum)
-
-#standarisasi format data
-clean_test <- lapply(new_test, function(df) {
-  df$Comment <- trimws(df$Comment)
-  df
-})
-
-#sorting ascending
+#sorting berdasarkan appversion dan tanggal
 sort_sample <- sample[order(new_sample$Sentiment), ]
 sort_sample
 sort_test <- lapply(new_test, function(df) {
   df$At <- as.POSIXct(df$At)
   df[order(df$At, df$AppVersion), ]
 })
-sort_test
+
 sort_train <- lapply(new_train, function(df) {
   df$At <- as.POSIXct(df$At)
   df_Appversion <- suppressWarnings(as.numeric(gsub("[^0-9.]", "", df$AppVersion)))
-  df[order(df$Sentiment, df$At, df_Appversion), ]
+  df[order(df$At, df_Appversion), ]
 })
-sort_train
 
 #sorting bahasa
 language <- function(df) {
