@@ -1,7 +1,7 @@
 #cek tipe data
 str(sample)
-lapply(df_test, str)
-lapply(df_train, str)
+lapply(run_test, str)
+lapply(run_train, str)
 
 #cek missing value dan hapus missing value
 cek_sample <- colSums(is.na(sample))
@@ -24,5 +24,19 @@ double_train <- lapply(duplikat_train, sum)
 #standarisasi format data
 clean_test <- lapply(new_test, function(df) {
     df$Comment <- trimws(df$Comment)
+    df
+})
+clean_train <- lapply(new_train, function(df) {
+    df$Comment <- trimws(df$Comment)
+    df
+})
+
+#hapus data NA pada detected_test dan detected_train
+new_detected_test <- lapply(detected_test, function(df) {
+    df <- df[!is.na(df$Language), ]
+    df
+})
+new_detected_train <- lapply(detected_train, function(df) {
+    df <- df[!is.na(df$Language), ]
     df
 })
